@@ -1,21 +1,16 @@
-ifeq ($(THEOS_PACKAGE_SCHEME),rootless)
-TARGET := iphone:clang:16.2:15.0
-else
-TARGET := iphone:clang:14.5:8.0
-endif
+TARGET := iphone:clang:18.2:14.0
 
 include $(THEOS)/makefiles/common.mk
 
-BUNDLE_NAME = NotRecordingPrefs
-NotRecordingPrefs_FILES = NRECListController.m NRECRootListController.m ../Shared.m
-NotRecordingPrefs_INSTALL_PATH = /Library/PreferenceBundles
-NotRecordingPrefs_FRAMEWORKS = UIKit
-NotRecordingPrefs_PRIVATE_FRAMEWORKS = Preferences
-NotRecordingPrefs_EXTRA_FRAMEWORKS = AltList
-NotRecordingPrefs_CFLAGS = -fobjc-arc
+APPLICATION_NAME = NotRecording
+NotRecording_FILES = main.m AppDelegate.m Shared.m dyld_validation_check.m utils.m Tweak.x
+NotRecording_FRAMEWORKS = UIKit
+NotRecording_CFLAGS = -fobjc-arc
+NotRecording_CODESIGN_FLAGS = -Sent.plist
+NotRecording_INSTALL_PATH = /Applications
 
-include $(THEOS_MAKE_PATH)/bundle.mk
+include $(THEOS_MAKE_PATH)/application.mk
 
-internal-stage::
-	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
-	$(ECHO_NOTHING)cp entry.plist $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences/NotRecordingPrefs.plist$(ECHO_END)
+after-stage::
+	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Applications/NotRecording.app$(ECHO_END)
+	$(ECHO_NOTHING)cp $(THEOS_STAGING_DIR)/Applications/NotRecording.app/NotRecording $(THEOS_STAGING_DIR)/Applications/NotRecording.app/NotRecording$(ECHO_END)

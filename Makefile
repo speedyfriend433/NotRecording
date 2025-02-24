@@ -1,17 +1,14 @@
 ifeq ($(THEOS_PACKAGE_SCHEME),rootless)
-TARGET := iphone:clang:16.2:15.0
+TARGET := iphone:clang:18.2:15.0
 else
-TARGET := iphone:clang:14.5:8.0
+TARGET := iphone:clang:18.2:14.0
 endif
-
-INSTALL_TARGET_PROCESSES = SpringBoard
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = NotRecording
-NotRecording_FILES = Tweak.x Shared.m
-NotRecording_CFLAGS = -fobjc-arc -DTHEOS_LEAN_AND_MEAN
+APPLICATION_NAME = NotRecording
+NotRecording_FILES = main.m AppDelegate.m Shared.m dyld_validation_check.m utils.m
+NotRecording_FRAMEWORKS = UIKit
+NotRecording_CFLAGS = -fobjc-arc
 
-include $(THEOS_MAKE_PATH)/tweak.mk
-SUBPROJECTS += Preferences
-include $(THEOS_MAKE_PATH)/aggregate.mk
+include $(THEOS_MAKE_PATH)/application.mk
